@@ -1,6 +1,10 @@
 package model
 
-import "time"
+import (
+	"fmt"
+	"shortener/config"
+	"time"
+)
 
 type Url struct {
 	Id       int64     `json:"id"`
@@ -8,4 +12,8 @@ type Url struct {
 	Short    string    `json:"short"`
 	Visited  int64     `json:"visited"`
 	Created  time.Time `json:"created"`
+}
+
+func (u *Url) ShortToUrl() {
+	u.Short = fmt.Sprintf("%s/%s", config.Env.AppUrl, u.Short)
 }

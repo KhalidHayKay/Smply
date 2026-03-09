@@ -1,14 +1,20 @@
 package service
 
 import (
-	"fmt"
 	"shortener/config"
 	"shortener/model"
+	"shortener/utils"
 	"time"
 )
 
 func StoreUrl(url string) (model.Url, error) {
-	short := "Qr12bwg"
+	saved, _ := GetByOriginal(url)
+
+	if (saved != model.Url{}) {
+		return saved, nil
+	}
+
+	short := utils.Encode(time.Now().UnixMicro())
 	now := time.Now()
 
 	res, err := config.DB.Exec(
@@ -29,7 +35,7 @@ func StoreUrl(url string) (model.Url, error) {
 	result := model.Url{
 		Id:       id,
 		Original: url,
-		Short:    fmt.Sprintf("%s/%s", config.Env.AppUrl, short),
+		Short:    short,
 		Visited:  0,
 		Created:  now,
 	}

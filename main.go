@@ -21,6 +21,7 @@ func main() {
 
 	http.HandleFunc("POST /shorten", handlers.Shorten)
 	http.HandleFunc("/{redirect}", handlers.Redirect)
+	http.HandleFunc("/stats/{code}", handlers.Stats)
 
 	log.Fatal(http.ListenAndServe(":8000", nil))
 }
