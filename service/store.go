@@ -14,13 +14,22 @@ func StoreUrl(url string) (model.Url, error) {
 		return saved, nil
 	}
 
-	short := utils.Encode(time.Now().UnixMicro())
 	now := time.Now()
 
-	res, err := config.DB.Exec(
-		`INSERT INTO urls (original, short, created) VALUES (?, ?, ?)`,
+	tx, err := config.DB.Begin()
+	if err != nil {
+		return model.Url{}, err
+	}
+
+	defer func() {
+		if err != nil {
+			tx.Rollback()
+		}
+	}()
+
+	res, err := tx.Exec(
+		`INSERT INTO urls (original, created) VALUES (?, ?)`,
 		url,
-		short,
 		now,
 	)
 	if err != nil {
@@ -29,6 +38,21 @@ func StoreUrl(url string) (model.Url, error) {
 
 	id, err := res.LastInsertId()
 	if err != nil {
+		return model.Url{}, err
+	}
+
+	short := utils.EncodeWithPadding(id)
+
+	_, err = tx.Exec(`
+		UPDATE urls
+		SET short = ?
+		WHERE id = ?
+	`, short, id)
+	if err != nil {
+		return model.Url{}, err
+	}
+
+	if err = tx.Commit(); err != nil {
 		return model.Url{}, err
 	}
 

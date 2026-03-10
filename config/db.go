@@ -24,7 +24,7 @@ func InitDB() error {
 	_, err = db.Exec(`
 		CREATE TABLE IF NOT EXISTS urls (
 			id INTEGER PRIMARY KEY AUTOINCREMENT,
-			original TEXT UNIQUE,
+			original TEXT UNIQUE NOT NULL,
 			short TEXT UNIQUE,
 			visited INTEGER DEFAULT 0,
 			created DATETIME
