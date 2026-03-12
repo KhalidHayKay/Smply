@@ -9,12 +9,9 @@ import (
 
 func main() {
 
-	err := config.LoadEnv()
-	if err != nil {
-		log.Println(err)
-	}
+	config.LoadEnv()
 
-	err = config.InitDB()
+	err := config.InitDB()
 	if err != nil {
 		log.Fatal(err)
 	}
