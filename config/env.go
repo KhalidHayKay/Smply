@@ -8,8 +8,10 @@ import (
 )
 
 type EnvType struct {
-	AppUrl string
-	DbUrl  string
+	AppEnv  string
+	AppPort string
+	AppUrl  string
+	DbUrl   string
 }
 
 var Env *EnvType
@@ -21,13 +23,14 @@ func LoadEnv() error {
 	}
 
 	Env = &EnvType{
-		AppUrl: os.Getenv("APP_URL"),
-		DbUrl:  os.Getenv("DB_URL"),
+		AppEnv:  os.Getenv("APP_ENV"),
+		AppPort: os.Getenv("PORT"),
+		AppUrl:  os.Getenv("APP_URL"),
+		DbUrl:   os.Getenv("DB_URL"),
 	}
 
 	if Env.AppUrl == "" || Env.DbUrl == "" {
 		return errors.New("APP_URL or DB_URL not set")
-
 	}
 
 	return nil

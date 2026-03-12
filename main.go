@@ -29,5 +29,12 @@ func main() {
 	http.HandleFunc("/r/{code}", handlers.Redirect)
 	http.HandleFunc("/r/{code}/stats", handlers.Stats)
 
-	log.Fatal(http.ListenAndServe(":8000", nil))
+	port := config.Env.AppPort
+
+	if port == "" && config.Env.AppEnv == "development" {
+		port = "8000"
+	}
+
+	log.Printf("Starting server on port %s in %s mode", port, config.Env.AppEnv)
+	log.Fatal(http.ListenAndServe(":"+port, nil))
 }
