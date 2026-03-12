@@ -2,11 +2,51 @@ package handlers
 
 import (
 	"database/sql"
+	"fmt"
 	"log"
 	"net/http"
-	"shortener/service"
-	"shortener/utils"
+	"snipfyi/service"
+	"snipfyi/utils"
+	"snipfyi/views"
 )
+
+func Home(w http.ResponseWriter, r *http.Request) {
+	data := map[string]any{
+		"Title": "Home",
+		"Page":  "home",
+	}
+
+	views.Render(w, "home.html", data)
+}
+
+func ShortenPage(w http.ResponseWriter, r *http.Request) {
+	data := map[string]any{
+		"Title": "Shorten URL",
+		"Page":  "shorten",
+	}
+
+	views.Render(w, "shorten.html", data)
+}
+
+func Stats(w http.ResponseWriter, r *http.Request) {
+	code := r.PathValue("code")
+
+	stat, err := service.Retrieve(code)
+
+	if err != nil {
+		fmt.Println(err)
+		Error(w, http.StatusNotFound, "Not found")
+		return
+	}
+
+	data := map[string]any{
+		"Title": "URL Stats",
+		"Page":  "stats",
+		"Stats": stat,
+	}
+
+	views.Render(w, "stats.html", data)
+}
 
 func Shorten(w http.ResponseWriter, r *http.Request) {
 	input := r.FormValue("url")
@@ -33,9 +73,9 @@ func Shorten(w http.ResponseWriter, r *http.Request) {
 }
 
 func Redirect(w http.ResponseWriter, r *http.Request) {
-	short := r.PathValue("redirect")
+	code := r.PathValue("code")
 
-	url, err := service.Retrieve(short)
+	url, err := service.Retrieve(code)
 
 	if err != nil {
 		if err == sql.ErrNoRows {
@@ -56,8 +96,4 @@ func Redirect(w http.ResponseWriter, r *http.Request) {
 	}()
 
 	http.Redirect(w, r, url.Original, http.StatusFound)
-}
-
-func Stats(w http.ResponseWriter, r *http.Request) {
-	//
 }

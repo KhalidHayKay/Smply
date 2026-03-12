@@ -1,0 +1,97 @@
+{{define "content"}}
+
+<section class="stats-page">
+  <div class="container">
+    <div class="stats-layout">
+
+      <a href="/" class="stats-back">
+        <svg viewBox="0 0 24 24"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+        Back to home
+      </a>
+
+      <div class="stats-kicker">Link Stats</div>
+      <h1 class="stats-title">
+        <em>{{ .Stats.Short }}</em>
+      </h1>
+      <div class="stats-created">
+        Created {{ .Stats.Created.Format "Jan 2, 2006" }}
+        · {{ .Stats.Created.Format "3:04 PM" }}
+      </div>
+
+      <!-- Big click count -->
+      <div class="stats-hero-num">
+        <div>
+          <div class="stats-big-num">{{ .Stats.Visited }}</div>
+        </div>
+        <div>
+          <div class="stats-big-label">
+            <strong>Total clicks</strong>
+            All time visits to this short link
+          </div>
+        </div>
+      </div>
+
+      <!-- Info cards -->
+      <div class="stats-cards">
+
+        <div class="stats-card">
+          <div class="stats-card-label">Short URL</div>
+          <div class="stats-card-value">
+            <a href="{{ .Stats.Short }}" target="_blank" rel="noopener">{{ .Stats.Short }}</a>
+          </div>
+        </div>
+
+        <div class="stats-card">
+          <div class="stats-card-label">Created</div>
+          <div class="stats-card-value">{{ .Stats.Created.Format "Jan 2, 2006" }}</div>
+        </div>
+
+        <div class="stats-card" style="grid-column: 1 / -1;">
+          <div class="stats-card-label">Original URL</div>
+          <div class="stats-card-value mono">
+            <a href="{{ .Stats.Original }}" target="_blank" rel="noopener" title="{{ .Stats.Original }}">
+              {{ .Stats.Original }}
+            </a>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- QR code -->
+      <div class="stats-qr-card">
+        <div class="stats-qr-box" id="stats-qr"></div>
+        <div class="stats-qr-info">
+          <h4>QR Code</h4>
+          <p>Scan to visit the short link, or download to use offline.</p>
+          <button class="btn btn-ghost btn-sm" onclick="downloadQR('stats-qr', 'snip-qr.png')">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+              <polyline points="7 10 12 15 17 10"/>
+              <line x1="12" y1="15" x2="12" y2="3"/>
+            </svg>
+            Download PNG
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<script>
+  // Generate QR for this link's short URL
+  document.addEventListener('DOMContentLoaded', function () {
+    if (typeof QRCode !== 'undefined') {
+      new QRCode(document.getElementById('stats-qr'), {
+        text: '{{ .Stats.Short }}',
+        width: 120,
+        height: 120,
+        colorDark: '#0d0f12',
+        colorLight: '#ffffff',
+        correctLevel: QRCode.CorrectLevel.M,
+      });
+    }
+  });
+</script>
+
+{{end}}

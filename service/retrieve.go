@@ -1,8 +1,8 @@
 package service
 
 import (
-	"shortener/config"
-	"shortener/model"
+	"snipfyi/config"
+	"snipfyi/model"
 )
 
 func Retrieve(short string) (model.Url, error) {
@@ -22,6 +22,7 @@ func Retrieve(short string) (model.Url, error) {
 		return model.Url{}, err
 	}
 
+	url.ShortToUrl()
 	return url, nil
 }
 

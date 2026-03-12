@@ -1,0 +1,226 @@
+{{define "content"}}
+
+<!-- ── Hero ── -->
+<section class="hero">
+	<div class="container">
+		<div class="hero-inner">
+			<div class="hero-badge">
+				<span class="badge-dot"></span>
+				Personal link snipfyi
+			</div>
+
+			<h1 class="hero-title">
+				Long URLs,<br />
+				<em>snipped.</em>
+			</h1>
+
+			<p class="hero-sub">
+				Paste any link, get a short one. Tracks clicks, supports custom slugs, and
+				each link gets its own
+				<code
+					style="
+						font-size: 13px;
+						background: var(--grey1);
+						padding: 1px 5px;
+						border-radius: 4px;
+						border: 1px solid var(--grey2);
+					"
+					>/stats</code
+				>
+				page.
+			</p>
+
+			<form id="hero-form">
+				<div class="hero-bar">
+					<input
+						type="url"
+						name="url"
+						placeholder="https://a-very-long-url-you-want-to-shorten.com/…"
+						required
+						autocomplete="off"
+						spellcheck="false"
+					/>
+					<button type="submit" class="btn btn-primary">
+						Snip
+						<svg
+							width="14"
+							height="14"
+							viewBox="0 0 24 24"
+							fill="none"
+							stroke="currentColor"
+							stroke-width="2.5"
+							stroke-linecap="round"
+						>
+							<line x1="5" y1="12" x2="19" y2="12" />
+							<polyline points="12 5 19 12 12 19" />
+						</svg>
+					</button>
+				</div>
+				<div id="hero-result" class="hero-result"></div>
+			</form>
+
+			<div class="hero-hints">
+				<span class="hero-hint">
+					<svg viewBox="0 0 24 24">
+						<path
+							d="M20 6L9 17l-5-5"
+							stroke-linecap="round"
+							stroke-linejoin="round"
+						/>
+					</svg>
+					No account needed
+				</span>
+				<span class="hero-hint">
+					<svg viewBox="0 0 24 24">
+						<path
+							d="M20 6L9 17l-5-5"
+							stroke-linecap="round"
+							stroke-linejoin="round"
+						/>
+					</svg>
+					Custom slugs
+				</span>
+				<span class="hero-hint">
+					<svg viewBox="0 0 24 24">
+						<path
+							d="M20 6L9 17l-5-5"
+							stroke-linecap="round"
+							stroke-linejoin="round"
+						/>
+					</svg>
+					Click analytics
+				</span>
+			</div>
+		</div>
+	</div>
+</section>
+
+<!-- ── Marquee strip ── -->
+<div class="strip">
+	<div class="strip-track">
+		<span class="strip-item">Short links</span>
+		<span class="strip-item">·</span>
+		<span class="strip-item"><b>Custom slugs</b></span>
+		<span class="strip-item">·</span>
+		<span class="strip-item">QR Code</span>
+		<span class="strip-item">·</span>
+		<span class="strip-item"><b>Fast redirects</b></span>
+		<span class="strip-item">·</span>
+		<span class="strip-item">Link stats</span>
+		<span class="strip-item">·</span>
+		<span class="strip-item"><b>Built with Go</b></span>
+		<span class="strip-item">·</span>
+		<!-- duplicate for seamless loop -->
+		<span class="strip-item">Short links</span>
+		<span class="strip-item">·</span>
+		<span class="strip-item"><b>Custom slugs</b></span>
+		<span class="strip-item">·</span>
+		<span class="strip-item">QR Code</span>
+		<span class="strip-item">·</span>
+		<span class="strip-item"><b>Fast redirects</b></span>
+		<span class="strip-item">·</span>
+		<span class="strip-item">Link stats</span>
+		<span class="strip-item">·</span>
+		<span class="strip-item"><b>Built with Go</b></span>
+		<span class="strip-item">·</span>
+	</div>
+</div>
+
+<!-- ── About / features ── -->
+<section class="about-section">
+	<div class="container">
+		<div class="about-grid">
+			<div>
+				<div class="about-kicker">What it does</div>
+				<h2 class="about-heading">
+					A URL snipfyi<br />
+					that <em>stays out of the way</em>
+				</h2>
+				<p class="about-body">
+					Built as a side project — a working Go backend with a minimal frontend.
+					Shorten links, set custom aliases, and see how many times each one's been
+					clicked. That's about it. No accounts, no dashboards, no noise.
+				</p>
+			</div>
+
+			<div class="features-list">
+				<div class="feat-item">
+					<div class="feat-icon">
+						<svg viewBox="0 0 24 24">
+							<path
+								d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"
+							/>
+							<line x1="8" y1="12" x2="16" y2="12" />
+						</svg>
+					</div>
+					<div class="feat-text">
+						<h4>Instant shortening</h4>
+						<p>Paste any URL, get a short link. No signup required to shorten.</p>
+					</div>
+				</div>
+
+				<div class="feat-item">
+					<div class="feat-icon">
+						<svg viewBox="0 0 24 24">
+							<path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
+							<path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
+						</svg>
+					</div>
+					<div class="feat-text">
+						<h4>Custom aliases</h4>
+						<p>
+							Pick your own slug —
+							<code
+								style="
+									font-size: 12px;
+									background: var(--grey1);
+									padding: 1px 4px;
+									border-radius: 3px;
+								"
+								>snip.fyi/anything</code
+							>.
+						</p>
+					</div>
+				</div>
+
+				<div class="feat-item">
+					<div class="feat-icon">
+						<svg viewBox="0 0 24 24">
+							<polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
+						</svg>
+					</div>
+					<div class="feat-text">
+						<h4>Per-link analytics</h4>
+						<p>
+							Every short link has a
+							<code
+								style="
+									font-size: 12px;
+									background: var(--grey1);
+									padding: 1px 4px;
+									border-radius: 3px;
+								"
+								>/stats</code
+							>
+							page with click counts.
+						</p>
+					</div>
+				</div>
+
+				<div class="feat-item">
+					<div class="feat-icon">
+						<svg viewBox="0 0 24 24">
+							<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+						</svg>
+					</div>
+					<div class="feat-text">
+						<h4>Fast & clean</h4>
+						<p>Go backend, no client-side frameworks, sub-100ms redirects.</p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+
+{{end}}

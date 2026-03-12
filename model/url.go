@@ -2,7 +2,7 @@ package model
 
 import (
 	"fmt"
-	"shortener/config"
+	"snipfyi/config"
 	"time"
 )
 
@@ -15,5 +15,5 @@ type Url struct {
 }
 
 func (u *Url) ShortToUrl() {
-	u.Short = fmt.Sprintf("%s/%s", config.Env.AppUrl, u.Short)
+	u.Short = fmt.Sprintf("%s/r/%s", config.Env.AppUrl, u.Short)
 }

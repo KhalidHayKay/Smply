@@ -1,4 +1,4 @@
-module shortener
+module snipfyi
 
 go 1.25.7
 

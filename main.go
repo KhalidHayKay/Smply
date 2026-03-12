@@ -3,8 +3,8 @@ package main
 import (
 	"log"
 	"net/http"
-	"shortener/config"
-	"shortener/handlers"
+	"snipfyi/config"
+	"snipfyi/handlers"
 )
 
 func main() {
@@ -19,9 +19,15 @@ func main() {
 		log.Fatal(dbErr)
 	}
 
-	http.HandleFunc("POST /shorten", handlers.Shorten)
-	http.HandleFunc("/{redirect}", handlers.Redirect)
-	http.HandleFunc("/stats/{code}", handlers.Stats)
+	fs := http.FileServer(http.Dir("./static"))
+	http.Handle("/static/", http.StripPrefix("/static/", fs))
+
+	http.HandleFunc("/", handlers.Home)
+	http.HandleFunc("/shorten", handlers.ShortenPage)
+
+	http.HandleFunc("POST /api/shorten", handlers.Shorten)
+	http.HandleFunc("/r/{code}", handlers.Redirect)
+	http.HandleFunc("/r/{code}/stats", handlers.Stats)
 
 	log.Fatal(http.ListenAndServe(":8000", nil))
 }

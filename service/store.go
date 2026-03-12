@@ -1,9 +1,9 @@
 package service
 
 import (
-	"shortener/config"
-	"shortener/model"
-	"shortener/utils"
+	"snipfyi/config"
+	"snipfyi/model"
+	"snipfyi/utils"
 	"time"
 )
 
