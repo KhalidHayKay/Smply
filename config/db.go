@@ -23,11 +23,12 @@ func InitDB() error {
 	db.SetMaxOpenConns(1)
 	_, err = db.Exec(`
 		CREATE TABLE IF NOT EXISTS urls (
-			id INTEGER PRIMARY KEY AUTOINCREMENT,
+			id       INTEGER PRIMARY KEY AUTOINCREMENT,
 			original TEXT UNIQUE NOT NULL,
-			short TEXT UNIQUE,
-			visited INTEGER DEFAULT 0,
-			created DATETIME
+			short    TEXT UNIQUE NOT NULL,
+			visited  INTEGER DEFAULT 0,
+			created  DATETIME DEFAULT CURRENT_TIMESTAMP,
+			last_visited DATETIME
 		);
 	`)
 	if err != nil {

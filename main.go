@@ -16,15 +16,20 @@ func main() {
 		log.Fatal(err)
 	}
 
-	fs := http.FileServer(http.Dir("./static"))
-	http.Handle("/static/", http.StripPrefix("/static/", fs))
+	// Page routes
+	http.HandleFunc("GET /", handlers.Home)
+	http.HandleFunc("GET /shorten", handlers.ShortenPage)
+	http.HandleFunc("GET /stats/{code}", handlers.Stats)
+	http.HandleFunc("GET /{code}", handlers.Redirect)
 
-	http.HandleFunc("/", handlers.Home)
-	http.HandleFunc("/shorten", handlers.ShortenPage)
-
+	// API routes
 	http.HandleFunc("POST /api/shorten", handlers.Shorten)
-	http.HandleFunc("/r/{code}", handlers.Redirect)
-	http.HandleFunc("/r/{code}/stats", handlers.Stats)
+	http.HandleFunc("GET /api/stats/{code}", handlers.StatsApi)
+	http.HandleFunc("GET /api/{code}", handlers.RedirectApi)
+
+	// Static files
+	fs := http.FileServer(http.Dir("./static"))
+	http.Handle("GET /static/", http.StripPrefix("/static/", fs))
 
 	port := config.Env.AppPort
 

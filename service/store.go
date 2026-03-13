@@ -7,14 +7,12 @@ import (
 	"time"
 )
 
-func StoreUrl(url string) (model.Url, error) {
+func StoreUrl(url string, short string) (model.Url, error) {
 	saved, _ := GetByOriginal(url)
 
 	if (saved != model.Url{}) {
 		return saved, nil
 	}
-
-	now := time.Now()
 
 	tx, err := config.DB.Begin()
 	if err != nil {
@@ -28,9 +26,9 @@ func StoreUrl(url string) (model.Url, error) {
 	}()
 
 	res, err := tx.Exec(
-		`INSERT INTO urls (original, created) VALUES (?, ?)`,
+		`INSERT INTO urls (original, short) VALUES (?, ?)`,
 		url,
-		now,
+		time.Now().Unix(),
 	)
 	if err != nil {
 		return model.Url{}, err
@@ -41,7 +39,9 @@ func StoreUrl(url string) (model.Url, error) {
 		return model.Url{}, err
 	}
 
-	short := utils.EncodeWithPadding(id)
+	if short == "" {
+		short = utils.EncodeWithPadding(id)
+	}
 
 	_, err = tx.Exec(`
 		UPDATE urls
@@ -60,9 +60,8 @@ func StoreUrl(url string) (model.Url, error) {
 		Id:       id,
 		Original: url,
 		Short:    short,
-		Visited:  0,
-		Created:  now,
 	}
 
+	result.BuildUrls()
 	return result, nil
 }

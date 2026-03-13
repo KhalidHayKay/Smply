@@ -69,7 +69,7 @@ function initShortenForm(formId, resultId, shortUrlBase) {
 
 			const { data } = await res.json();
 			const shortUrl = data.short;
-			const statsUrl = `${shortUrl}/stats`;
+			const statsUrl = data.stat;
 
 			renderResult(resultEl, shortUrl, statsUrl);
 			resultEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
@@ -120,6 +120,7 @@ function downloadQR(containerId, filename) {
 
 // ── Hero result (compact, single column) ──
 function renderResult(el, shortUrl, statsUrl) {
+	console.log(statsUrl);
 	const qrId = 'hero-qr-' + Date.now();
 	el.innerHTML = `
     <div class="result-tag">Link ready</div>
@@ -136,7 +137,7 @@ function renderResult(el, shortUrl, statsUrl) {
         <div class="result-qr-box" id="${qrId}"></div>
         <button class="result-qr-dl" onclick="downloadQR('${qrId}', 'snip-qr.png')">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-          PNG
+          Download PNG
         </button>
       </div>
       <div class="result-stats-col">
@@ -223,7 +224,7 @@ function initAdvancedForm() {
 
 			const { data } = await res.json();
 			const shortUrl = data.short;
-			const statsUrl = `${shortUrl}/stats`;
+			const statsUrl = data.stat;
 
 			renderShortenPageResult(resultEl, shortUrl, statsUrl);
 			resultEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
