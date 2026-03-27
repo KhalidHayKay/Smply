@@ -4,8 +4,17 @@ import (
 	"log"
 	"net/http"
 	"smply/config"
-	"smply/handlers"
+	"smply/handler"
+	"smply/middleware"
 )
+
+func apply(h http.HandlerFunc, m ...func(http.Handler) http.Handler) http.Handler {
+	var res http.Handler = h
+	for _, middleware := range m {
+		res = middleware(res)
+	}
+	return res
+}
 
 func main() {
 	config.LoadEnv()
@@ -21,20 +30,21 @@ func main() {
 	mux.Handle("GET /static/", http.StripPrefix("/static/", files))
 
 	// Page routes
-	mux.HandleFunc("GET /", handlers.Home)
-	mux.HandleFunc("GET /shorten", handlers.ShortenPage)
-	mux.HandleFunc("GET /api", handlers.ApiPage)
-	mux.HandleFunc("GET /stats/{code}", handlers.Stats)
-	mux.HandleFunc("GET /{code}", handlers.Redirect)
+	mux.Handle("GET /", http.HandlerFunc(handler.Home))
+	mux.Handle("GET /shorten", http.HandlerFunc(handler.ShortenPage))
+	mux.Handle("GET /api", http.HandlerFunc(handler.ApiPage))
+	mux.Handle("GET /stats/{code}", http.HandlerFunc(handler.Stats))
+	mux.Handle("GET /{code}", http.HandlerFunc(handler.Redirect))
+	mux.Handle("GET /key/activate", http.HandlerFunc(handler.CreateApiKey))
 
 	// Private API routes
-	mux.HandleFunc("POST /api/key/request", handlers.RequestApiKey)
-	mux.HandleFunc("GET /key/activate", handlers.CreateApiKey)
+	mux.Handle("POST /api/internal/shorten", http.HandlerFunc(handler.Shorten))
+	mux.Handle("POST /api/internal/key/request", http.HandlerFunc(handler.RequestApiKey))
 
 	//Public API routes
-	mux.HandleFunc("POST /api/v1/shorten", handlers.Shorten)
-	mux.HandleFunc("GET /api/v1/stats/{code}", handlers.StatsApi)
-	mux.HandleFunc("GET /api/v1/redirect/{code}", handlers.RedirectApi)
+	mux.Handle("POST /api/v1/shorten", middleware.Apply(handler.Shorten, middleware.RequireKey))
+	mux.Handle("GET /api/v1/stats/{code}", middleware.Apply(handler.StatsApi, middleware.RequireKey))
+	mux.Handle("GET /api/v1/redirect/{code}", middleware.Apply(handler.RedirectApi, middleware.RequireKey))
 
 	port := config.Env.AppPort
 

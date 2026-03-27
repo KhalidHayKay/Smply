@@ -57,7 +57,7 @@ function initShortenForm(formId, resultId, shortUrlBase) {
 				body.append('alias', aliasInput.value);
 			}
 
-			const res = await fetch('/api/shorten', {
+			const res = await fetch('/api/internal/shorten', {
 				method: 'POST',
 				body,
 			});
@@ -212,7 +212,7 @@ function initAdvancedForm() {
 				body.append('alias', aliasInput.value);
 			}
 
-			const res = await fetch('/api/shorten', {
+			const res = await fetch('/api/internal/shorten', {
 				method: 'POST',
 				body,
 			});
@@ -292,7 +292,7 @@ function initApiPage() {
 	const apiForm = document.getElementById('api-key-form');
 	if (!apiForm) return;
 
-	apiForm.addEventListener('submit', function (e) {
+	apiForm.addEventListener('submit', async function (e) {
 		e.preventDefault();
 		const emailInput = document.getElementById('api-email');
 		const email = emailInput?.value.trim();
@@ -301,24 +301,34 @@ function initApiPage() {
 		const prevText = btn.textContent;
 		btn.textContent = 'Sending…';
 		btn.disabled = true;
-		setTimeout(() => {
+
+		try {
+			const body = new FormData();
+			body.append('email', email);
+
+			const res = await fetch('/api/internal/key/request', {
+				method: 'POST',
+				body,
+			});
+
+			if (!res.ok) {
+				const err = await res.json().catch(() => ({}));
+				throw new Error(err.error || 'Something went wrong');
+			}
+
 			if (emailInput) emailInput.closest('.field').style.display = 'none';
 			btn.style.display = 'none';
 			const sentTo = document.getElementById('api-sent-to');
 			if (sentTo) sentTo.textContent = email;
 			const success = document.getElementById('api-success');
 			if (success) success.style.display = 'flex';
-		}, 1100);
+		} catch (err) {
+			showToast(err.message, 'error');
+		} finally {
+			btn.textContent = prevText;
+			btn.disabled = false;
+		}
 	});
-
-	window.toggleKeyDemo = function () {
-		const keyCard = document.getElementById('api-key-card');
-		const demoToggle = document.getElementById('demo-toggle');
-		if (!keyCard || !demoToggle) return;
-		const isVisible = keyCard.style.display === 'block';
-		keyCard.style.display = isVisible ? 'none' : 'block';
-		demoToggle.textContent = isVisible ? 'Preview key state' : 'Hide key state';
-	};
 
 	window.copyApiKey = function () {
 		const keyValue = document.getElementById('api-key-value');

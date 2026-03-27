@@ -1,4 +1,6 @@
 /.git
 /.vscode
-.env
+.env.*
+*.env
+!.env.example
 tmp

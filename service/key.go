@@ -81,3 +81,22 @@ func CreateApiKey(ctx context.Context, token string) (string, error) {
 
 	return key, nil
 }
+
+func ValidateAPIKey(ctx context.Context, key string) (bool, error) {
+	keyHash := utils.Hash(key)
+
+	var exists bool
+
+	err := config.DB.QueryRow(ctx, `
+		SELECT EXISTS (
+			SELECT 1 FROM api_keys
+			WHERE key_hash = $1 AND expires_at > NOW()
+		)
+	`, keyHash).Scan(&exists)
+
+	if err != nil {
+		return false, err
+	}
+
+	return exists, nil
+}

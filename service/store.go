@@ -37,7 +37,7 @@ func StoreUrl(ctx context.Context, url string, short string) (model.Url, error) 
 	}
 
 	if short == "" {
-		short = utils.EncodeWithPadding(id)
+		short = utils.EncodeWithPadding(id, 2)
 	}
 
 	_, err = tx.Exec(

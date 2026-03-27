@@ -21,13 +21,13 @@ func Encode(num int64) string {
 	return result
 }
 
-func EncodeWithPadding(id int64) string {
+func EncodeWithPadding(id int64, pad int) string {
 	base62 := Encode(id) // your existing Base62 encoder
-	if len(base62) >= 2 {
+	if len(base62) >= pad {
 		return base62
 	}
 
-	for len(base62) < 3 {
+	for len(base62) < pad {
 		randIndex := rand.Intn(len(charset))
 		base62 = base62 + string(charset[randIndex])
 	}

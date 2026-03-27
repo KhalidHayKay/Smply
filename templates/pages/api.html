@@ -77,55 +77,6 @@
 							</div>
 						</div>
 					</div>
-
-					<!-- key display — shown after email flow -->
-					<div class="api-key-card" id="api-key-card" style="display: none">
-						<div class="api-key-header">
-							<span class="api-key-label">Your API key</span>
-							<span class="api-key-warning">
-								<svg
-									viewBox="0 0 24 24"
-									fill="none"
-									stroke="currentColor"
-									stroke-width="2"
-									stroke-linecap="round"
-								>
-									<path
-										d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"
-									/>
-									<line x1="12" y1="9" x2="12" y2="13" />
-									<line x1="12" y1="17" x2="12.01" y2="17" />
-								</svg>
-								Shown once
-							</span>
-						</div>
-						<div class="api-key-display">
-							<code id="api-key-value">sk_live_1234567890abcdef</code>
-							<button class="api-key-copy" id="api-copy-btn" onclick="copyApiKey()">
-								<svg
-									width="12"
-									height="12"
-									viewBox="0 0 24 24"
-									fill="none"
-									stroke="currentColor"
-									stroke-width="2"
-									stroke-linecap="round"
-								>
-									<rect x="9" y="9" width="13" height="13" rx="2" />
-									<path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
-								</svg>
-								Copy
-							</button>
-						</div>
-						<p class="api-key-note">
-							Store this key securely — it won't be shown again.
-						</p>
-					</div>
-
-					<!-- dev-only toggle, remove in prod -->
-					<button class="api-demo-toggle" onclick="toggleKeyDemo()" id="demo-toggle">
-						Preview key state
-					</button>
 				</div>
 			</aside>
 
@@ -139,7 +90,7 @@
 					</div>
 					<div class="api-base-row">
 						<span class="api-base-label">Auth header</span>
-						<code>Authorization: Bearer &lt;YOUR_API_KEY&gt;</code>
+						<code>X-API-Key: &lt;YOUR_API_KEY&gt;</code>
 					</div>
 				</div>
 
@@ -156,7 +107,7 @@
 						<div class="api-code-block">
 							<div class="api-code-bar">
 								<span>json</span>
-								<button class="api-code-copy" onclick="copyCode(this, 'shorten-req')">
+								<button class="api-code-copy" onclick="copyText(this, 'shorten-req')">
 									Copy
 								</button>
 							</div>
