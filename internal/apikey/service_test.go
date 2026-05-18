@@ -11,25 +11,26 @@ import (
 )
 
 type mockRepo struct {
-	revokeAllFunc  func(ctx context.Context, email string) error
-	createFunc     func(ctx context.Context, email, key string) (APIKey, error)
+	createFunc     func(ctx context.Context, email, keyHash string) (APIKey, error)
 	findByHashFunc func(ctx context.Context, keyHash string) (*APIKey, error)
-	calls          []string
+	revokeAllFunc  func(ctx context.Context, email string) error
+
+	calls []string
 }
 
-func (m *mockRepo) RevokeAll(ctx context.Context, email string) error {
-	m.calls = append(m.calls, "RevokeAll")
-	return m.revokeAllFunc(ctx, email)
-}
-
-func (m *mockRepo) Create(ctx context.Context, email, key string) (APIKey, error) {
+func (m *mockRepo) Create(ctx context.Context, email, keyHash string) (APIKey, error) {
 	m.calls = append(m.calls, "Create")
-	return m.createFunc(ctx, email, key)
+	return m.createFunc(ctx, email, keyHash)
 }
 
 func (m *mockRepo) FindByHash(ctx context.Context, keyHash string) (*APIKey, error) {
 	m.calls = append(m.calls, "FindByHash")
 	return m.findByHashFunc(ctx, keyHash)
+}
+
+func (m *mockRepo) RevokeAll(ctx context.Context, email string) error {
+	m.calls = append(m.calls, "RevokeAll")
+	return m.revokeAllFunc(ctx, email)
 }
 
 type mockMagicTokenRepo struct {
@@ -63,6 +64,8 @@ func TestCreateRevokesAllBeforeCreate(t *testing.T) {
 	}
 	magicService := magictoken.NewService(magicRepo)
 
+	var capturedHash string
+
 	repo := &mockRepo{
 		revokeAllFunc: func(ctx context.Context, email string) error {
 			if email != "alice@example.com" {
@@ -70,11 +73,13 @@ func TestCreateRevokesAllBeforeCreate(t *testing.T) {
 			}
 			return nil
 		},
-		createFunc: func(ctx context.Context, email, key string) (APIKey, error) {
-			if len(key) == 0 {
-				t.Fatal("expected generated key")
+		createFunc: func(ctx context.Context, email, keyHash string) (APIKey, error) {
+			capturedHash = keyHash
+			if len(keyHash) == 0 {
+				t.Fatal("expected key hash to be passed, got empty string")
 			}
-			return APIKey{OwnerEmail: email, KeyHash: utils.Hash(key)}, nil
+
+			return APIKey{OwnerEmail: email, KeyHash: keyHash}, nil
 		},
 	}
 
@@ -83,10 +88,20 @@ func TestCreateRevokesAllBeforeCreate(t *testing.T) {
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}
+
 	if apiKey == "" {
-		t.Fatal("expected key to be returned")
+		t.Fatal("expected key to be returned, got empty string")
 	}
-	if len(repo.calls) != 2 || repo.calls[0] != "RevokeAll" || repo.calls[1] != "Create" {
+
+	if capturedHash != utils.Hash(apiKey) {
+		t.Fatal("expected api key to be hashed, got raw key")
+	}
+
+	if len(repo.calls) != 2 {
+		t.Fatalf("expected 2 repo calls, got %d", len(repo.calls))
+	}
+
+	if repo.calls[0] != "RevokeAll" || repo.calls[1] != "Create" {
 		t.Fatalf("expected revoke then create, got %v", repo.calls)
 	}
 }
@@ -148,6 +163,7 @@ func TestValidateReturnsTrueWhenKeyFound(t *testing.T) {
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}
+
 	if !ok {
 		t.Fatal("expected key validation to succeed")
 	}
@@ -166,6 +182,7 @@ func TestValidateReturnsFalseWhenKeyNotFound(t *testing.T) {
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}
+
 	if ok {
 		t.Fatal("expected key validation to fail for missing key")
 	}
@@ -173,15 +190,21 @@ func TestValidateReturnsFalseWhenKeyNotFound(t *testing.T) {
 
 func TestValidateRejectsRevokedKey(t *testing.T) {
 	ctx := context.Background()
-	revokedAt := time.Now()
+	key := "apikey"
+	expectedHash := utils.Hash(key)
 	repo := &mockRepo{
 		findByHashFunc: func(ctx context.Context, keyHash string) (*APIKey, error) {
-			return &APIKey{OwnerEmail: "alice@example.com", KeyHash: keyHash, RevokedAt: &revokedAt}, nil
+			if keyHash != expectedHash {
+				t.Fatalf("Validate() passed incorrect hash to repo: got %q, want %q", keyHash, expectedHash)
+			}
+
+			revokedAt := time.Now()
+			return &APIKey{OwnerEmail: "alice@example.com", KeyHash: expectedHash, RevokedAt: &revokedAt}, nil
 		},
 	}
 
 	svc := NewService(repo, nil)
-	ok, err := svc.Validate(ctx, "key")
+	ok, err := svc.Validate(ctx, key)
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}
