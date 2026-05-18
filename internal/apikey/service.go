@@ -53,7 +53,7 @@ func (s *Service) Create(ctx context.Context, token string) (string, error) {
 		return "", err
 	}
 
-	_, err = s.repo.Create(ctx, magicToken.Email, rawkey)
+	_, err = s.repo.Create(ctx, magicToken.Email, utils.Hash(rawkey))
 	if err != nil {
 		log.Printf("error creating API key: %v", err)
 		return "", err

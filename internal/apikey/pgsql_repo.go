@@ -2,7 +2,6 @@ package apikey
 
 import (
 	"context"
-	"smply/utils"
 
 	"github.com/jackc/pgx/v5/pgxpool"
 )
@@ -15,14 +14,14 @@ func NewPostgresRepo(pgsql *pgxpool.Pool) *PostgresRepo {
 	return &PostgresRepo{pgsql}
 }
 
-func (r PostgresRepo) Create(ctx context.Context, email, key string) (APIKey, error) {
+func (r PostgresRepo) Create(ctx context.Context, email, keyHash string) (APIKey, error) {
 	var apiKey APIKey
 
 	err := r.pgsql.QueryRow(ctx, `
 		INSERT INTO api_keys (owner_email, key_hash, created_at)
 		VALUES ($1, $2, NOW())
 		RETURNING id, owner_email, key_hash, created_at
-	`, email, utils.Hash(key)).Scan(
+	`, email, keyHash).Scan(
 		&apiKey.Id,
 		&apiKey.OwnerEmail,
 		&apiKey.KeyHash,

@@ -69,9 +69,11 @@ func TestGetBuildsShortUrl(t *testing.T) {
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}
+
 	if got.ShortUrl == "" {
 		t.Fatal("expected short url to be built")
 	}
+
 	if len(repo.calls) != 1 || repo.calls[0] != "Get" {
 		t.Fatalf("expected Get call, got %v", repo.calls)
 	}
@@ -105,6 +107,7 @@ func TestGetAdminSuccess(t *testing.T) {
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}
+
 	if got.TotalUrls != 1 {
 		t.Fatalf("expected TotalUrls 1, got %d", got.TotalUrls)
 	}
