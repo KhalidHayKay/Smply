@@ -40,7 +40,9 @@ services:
     ports:
       - "6379:6379"
     command: ["redis-server", "--requirepass", "admin"]
+    volumes:
+      - redis-data:/data
 
 volumes:
   pgdata:
-  go-module-cache:
+  redis-data:

@@ -40,8 +40,9 @@ func (r PostgresRepo) FindByHash(ctx context.Context, keyHash string) (*APIKey, 
 
 	err := r.pgsql.QueryRow(ctx, `
 		SELECT id, owner_email, key_hash, created_at
-		FROM api_keys
-		WHERE key_hash = $1
+			FROM api_keys
+			WHERE key_hash = $1
+				AND revoked_at IS NULL
 	`, keyHash).Scan(
 		&apiKey.Id,
 		&apiKey.OwnerEmail,
