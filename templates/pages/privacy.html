@@ -1,0 +1,187 @@
+{{define "page-css"}}
+<link rel="stylesheet" href="/static/css/legal.css" />
+{{end}} {{define "content"}}
+<section class="legal-page">
+  <div class="container legal-shell">
+    <div class="legal-header">
+      <div class="page-kicker">Legal</div>
+      <h1 class="page-title">Privacy <em>policy</em></h1>
+      <p class="page-sub">Effective date: September 16, 2026</p>
+    </div>
+
+    <article class="legal-content">
+      <section>
+        <h2>1. Overview</h2>
+        <p>
+          Smply helps users shorten long URLs and view basic analytics for their
+          links. This Privacy Policy explains the information Smply handles for
+          the website and service, and for the Smply Chrome extension when used
+          with the service.
+        </p>
+      </section>
+
+      <section>
+        <h2>2. Smply service</h2>
+        <p>
+          When a user submits a URL to Smply, the service may store the
+          submitted original URL, the generated short alias or short code, and
+          information about when the link was created. This allows Smply to
+          generate a redirecting short link and provide access to the link's
+          stats page.
+        </p>
+        <p>
+          Smply also stores data needed to operate the service, including the
+          short link record and related metadata. When API access is used, the
+          system may also maintain authentication records associated with an API
+          key and the email address that owns that key.
+        </p>
+      </section>
+
+      <section>
+        <h2>3. Chrome extension</h2>
+        <p>
+          The Smply Chrome extension is designed to access the URL of the
+          currently active browser tab only when the user invokes the extension.
+          The extension displays that URL so the user can review it and decide
+          whether to create a short link.
+        </p>
+        <p>
+          The extension sends the URL to the Smply service only when the user
+          explicitly requests creation of a short link. It uses a Smply API key
+          for authenticated requests. The API key is stored locally in the
+          user's browser using Chrome extension storage.
+        </p>
+        <p>
+          The extension is not intended to continuously monitor a user's
+          browsing activity or collect page content in the background while the
+          user browses the web.
+        </p>
+      </section>
+
+      <section>
+        <h2>4. Link analytics</h2>
+        <p>
+          Smply supports link statistics for shortened URLs. In the codebase
+          currently shipped here, redirect activity is associated with visit
+          metadata such as the referrer, browser/user-agent information, and
+          click time. The database schema also includes fields for IP/network
+          metadata, but in the active request flow shown in this repo, the
+          analytics path currently records the referrer and user agent alongside
+          the click timestamp. This information is used to provide link
+          statistics, operate the service, prevent abuse, and maintain
+          reliability.
+        </p>
+        <p>
+          Smply does not use this data for advertising or profiling purposes as
+          part of the product described in this codebase.
+        </p>
+      </section>
+
+      <section>
+        <h2>5. API authentication</h2>
+        <p>
+          API credentials are used to authenticate requests to Smply. The
+          service validates API keys before accepting authenticated requests,
+          such as creating a short link through the API.
+        </p>
+        <p>
+          For the Chrome extension, the API key is stored in the user's browser
+          using Chrome extension local storage and is transmitted to Smply only
+          when the user makes an authenticated request. Raw API keys are not
+          intentionally exposed in public-facing logs or user-visible pages.
+        </p>
+      </section>
+
+      <section>
+        <h2>6. How information is used</h2>
+        <p>
+          Smply uses information for legitimate product and service purposes,
+          including:
+        </p>
+        <ul>
+          <li>providing URL shortening and redirection</li>
+          <li>authenticating API requests</li>
+          <li>providing link statistics and usage insights</li>
+          <li>maintaining service reliability and performance</li>
+          <li>preventing abuse, spam, and technical misuse</li>
+          <li>troubleshooting, diagnosing issues, and improving the service</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>7. Data sharing and service providers</h2>
+        <p>
+          Smply does not sell user data. Smply may share information with
+          third-party infrastructure or service providers that are necessary to
+          host, process, store, or deliver the service, such as hosting,
+          database, email, or other technical providers. Those providers process
+          information only as needed to operate and support Smply.
+        </p>
+      </section>
+
+      <section>
+        <h2>8. Data retention</h2>
+        <p>
+          Smply retains data for as long as necessary to operate the service,
+          provide requested functionality, maintain link records, support
+          analytics, prevent abuse, and comply with legal or operational
+          obligations. The exact retention period depends on the type of
+          information and the needs of the service.
+        </p>
+      </section>
+
+      <section>
+        <h2>9. User choices</h2>
+        <p>
+          Users can choose not to use the Smply Chrome extension. Users who use
+          the extension may remove or replace their stored API key in the
+          browser extension settings. Users may also choose not to shorten a URL
+          after reviewing it in the extension. If you have privacy or data
+          questions, you can reach out through the existing support or contact
+          mechanism on the Smply website.
+        </p>
+      </section>
+
+      <section>
+        <h2>10. Security</h2>
+        <p>
+          Smply uses reasonable administrative, technical, and organizational
+          measures to help protect information handled by the service. No system
+          is completely secure, and Smply cannot guarantee absolute security
+          against all threats or misuse.
+        </p>
+      </section>
+
+      <section>
+        <h2>11. Children's privacy</h2>
+        <p>
+          Smply is not intended for children under the age of 13, and users
+          under that age should not use the service without the supervision of a
+          parent or legal guardian. If Smply becomes aware that it has received
+          personal information from a child under 13, it will take appropriate
+          steps to remove or restrict that information where required.
+        </p>
+      </section>
+
+      <section>
+        <h2>12. Changes to this policy</h2>
+        <p>
+          Smply may update this Privacy Policy from time to time. When the
+          policy changes, the effective date at the top of this page will be
+          updated to reflect the current version. Continued use of the service
+          after changes are posted constitutes acceptance of the updated policy.
+        </p>
+      </section>
+
+      <section>
+        <h2>13. Contact</h2>
+        <p>
+          For questions about this Privacy Policy or data practices, users may
+          use the public support or contact mechanism already available on the
+          Smply website, including the project links shown on the site.
+        </p>
+      </section>
+    </article>
+  </div>
+</section>
+{{end}}

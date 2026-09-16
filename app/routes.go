@@ -32,6 +32,8 @@ func setupRouter(handlers Handlers, middleware *middleware.Middleware) *chi.Mux 
 	// Page routes
 	router.Get("/", home.Page)
 	router.Get("/shorten", handlers.URL.ShortenPage)
+	router.Get("/privacy", home.PrivacyPage)
+	router.Get("/terms", home.TermsPage)
 
 	// TODO: rate limit
 	router.Post("/shorten", handlers.URL.HandleShortenForm)

@@ -4,6 +4,8 @@ import (
 	"html/template"
 	"log"
 	"net/http"
+	"path/filepath"
+	"runtime"
 	"strings"
 )
 
@@ -14,13 +16,25 @@ type ViewData struct {
 	Error string
 }
 
+func projectRoot() string {
+	_, filename, _, ok := runtime.Caller(0)
+	if !ok {
+		return "."
+	}
+	return filepath.Join(filepath.Dir(filename), "..", "..")
+}
+
+func templatePath(parts ...string) string {
+	return filepath.Join(append([]string{projectRoot()}, parts...)...)
+}
+
 // Page renders an HTML template with the given data
 func Page(w http.ResponseWriter, page string, data ViewData) {
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
 
 	t, err := template.ParseFiles(
-		"templates/layouts/layout.html",
-		"templates/pages/"+page,
+		templatePath("templates", "layouts", "layout.html"),
+		templatePath("templates", "pages", page),
 	)
 	if err != nil {
 		log.Printf("ERROR: Failed to parse templates: %v", err)
@@ -52,8 +66,8 @@ func AdminPage(w http.ResponseWriter, page string, data ViewData) {
 	t, err := template.New("admin-layout").
 		Funcs(funcMap).
 		ParseFiles(
-			"templates/layouts/admin-layout.html",
-			"templates/pages/"+page,
+			templatePath("templates", "layouts", "admin-layout.html"),
+			templatePath("templates", "pages", page),
 		)
 	if err != nil {
 		log.Printf("ERROR: Failed to parse templates: %v", err)
@@ -71,7 +85,7 @@ func AdminPage(w http.ResponseWriter, page string, data ViewData) {
 func SinglePage(w http.ResponseWriter, page string, data ViewData) {
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
 
-	t, err := template.ParseFiles("templates/pages/" + page)
+	t, err := template.ParseFiles(templatePath("templates", "pages", page))
 	if err != nil {
 		log.Printf("ERROR: Failed to parse template: %v", err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -103,8 +117,8 @@ func ErrorPage(w http.ResponseWriter, status int, message string) {
 	}
 
 	t, err := template.ParseFiles(
-		"templates/layouts/layout.html",
-		errorTemplate,
+		templatePath("templates", "layouts", "layout.html"),
+		templatePath(errorTemplate),
 	)
 	if err != nil {
 		// Fallback to plain text error if template fails

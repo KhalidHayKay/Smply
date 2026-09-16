@@ -1,0 +1,101 @@
+/* ============================================
+   LEGAL.CSS — Legal pages shared styles
+   Requires: base.css
+   ============================================ */
+
+.legal-page {
+  min-height: calc(100vh - 56px);
+  padding: 56px 0 96px;
+}
+
+.legal-shell {
+  max-width: 760px;
+}
+
+.legal-header {
+  margin-bottom: 28px;
+}
+
+.page-kicker {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--grey3);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin-bottom: 12px;
+}
+
+.page-title {
+  font-family: var(--font-serif);
+  font-size: clamp(32px, 5vw, 52px);
+  font-weight: 400;
+  color: var(--ink);
+  letter-spacing: -0.02em;
+  line-height: 1.08;
+  margin-bottom: 8px;
+}
+
+.page-title em {
+  font-style: italic;
+  color: var(--blue);
+}
+
+.page-sub {
+  font-size: 14px;
+  color: var(--grey4);
+  line-height: 1.7;
+}
+
+.legal-content {
+  background: rgba(255, 255, 255, 0.7);
+  border: 1px solid var(--grey2);
+  border-radius: 20px;
+  padding: 28px 28px 22px;
+  box-shadow: var(--shadow-sm);
+}
+
+.legal-content section + section {
+  margin-top: 28px;
+}
+
+.legal-content h2 {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--ink);
+  margin-bottom: 10px;
+  letter-spacing: -0.01em;
+}
+
+.legal-content p,
+.legal-content li {
+  font-size: 14px;
+  color: var(--grey4);
+  line-height: 1.8;
+}
+
+.legal-content p + p {
+  margin-top: 12px;
+}
+
+.legal-content ul {
+  margin: 10px 0 0 18px;
+  padding-left: 12px;
+}
+
+.legal-content li + li {
+  margin-top: 6px;
+}
+
+@media (max-width: 640px) {
+  .legal-page {
+    padding-top: 42px;
+  }
+
+  .legal-content {
+    padding: 20px 18px 18px;
+  }
+
+  .page-sub {
+    margin-bottom: 0;
+  }
+}
