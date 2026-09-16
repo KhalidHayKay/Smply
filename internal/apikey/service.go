@@ -2,10 +2,13 @@ package apikey
 
 import (
 	"context"
+	"errors"
 	"log"
 	"smply/internal/magictoken"
 	"smply/internal/queue"
 	"smply/utils"
+
+	"github.com/jackc/pgx/v5"
 )
 
 type Service struct {
@@ -68,6 +71,11 @@ func (s *Service) Validate(ctx context.Context, key string) (bool, error) {
 	apiKey, err := s.repo.FindByHash(ctx, keyHash)
 	if err != nil {
 		log.Printf("error finding API key: %v", err)
+
+		if errors.Is(pgx.ErrNoRows, err) {
+			return false, nil
+		}
+
 		return false, err
 	}
 	if apiKey == nil {
