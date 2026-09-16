@@ -11,3 +11,17 @@ func Page(w http.ResponseWriter, r *http.Request) {
 		Page:  "home",
 	})
 }
+
+func PrivacyPage(w http.ResponseWriter, r *http.Request) {
+	render.Page(w, "privacy.html", render.ViewData{
+		Title: "Privacy Policy",
+		Page:  "privacy",
+	})
+}
+
+func TermsPage(w http.ResponseWriter, r *http.Request) {
+	render.Page(w, "terms.html", render.ViewData{
+		Title: "Terms of Service",
+		Page:  "terms",
+	})
+}
