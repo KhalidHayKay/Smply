@@ -242,7 +242,7 @@ func (r *PostgresRepo) GetAdmin(ctx context.Context) (AdminStats, error) {
 
 	if err := r.pgsql.QueryRow(ctx, `
 		SELECT COUNT(*) FROM api_keys
-		WHERE expires_at > NOW() AND last_used_at IS NULL
+		WHERE revoked_at IS NULL AND last_used_at IS NULL
 	`).Scan(&s.ActiveApiKeys); err != nil {
 		return s, err
 	}
