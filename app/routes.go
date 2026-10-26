@@ -69,8 +69,8 @@ func setupRouter(handlers Handlers, middleware *middleware.Middleware) *chi.Mux 
 
 	// Public API routes with rate limiting and key validation
 	router.Route("/api/v1", func(r chi.Router) {
-		r.Use(middleware.RateLimit(&publicAPIRateLimitConfig))
 		r.Use(middleware.RequireKey)
+		r.Use(middleware.RateLimit(&publicAPIRateLimitConfig))
 
 		r.Post("/shorten", handlers.URL.Shorten)
 		r.Get("/stats/{alias}", handlers.Stat.Get)
